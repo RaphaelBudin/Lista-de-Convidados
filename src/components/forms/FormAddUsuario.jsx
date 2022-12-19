@@ -1,93 +1,102 @@
 import { useEffect, useState } from "react";
 import { GroupInput, Input, LabelInput, BotaoSubmit } from "../../Components";
+import FormPresente from "./FormPresente";
+import ListaPresentesAdicionados from "./ListaPresentesAdicionados";
 import PopUp from "./PopUp";
 
-export default function FormAddUsuario({addUsuario}) {
-  const [inputNomeUsuario, setInputNomeUsuario] = useState('');
-  const [inputIdade, setInputIdade] = useState('');
+export default function FormAddUsuario({ addUsuario, listaOpcoesPresentes }) {
+  const [inputNomeUsuario, setInputNomeUsuario] = useState("");
+  const [inputIdade, setInputIdade] = useState("");
   const [popUpAberto, setPopUpAberto] = useState(false);
-  const [textoPopUp, setTextoPopUp] = useState('');
+  const [textoPopUp, setTextoPopUp] = useState("");
   const [nomeUsuarioValido, setNomeUsuarioValido] = useState(true);
   const [idadeValida, setIdadeValida] = useState(true);
+  const [confirmado, setConfirmado] = useState(false);
+  const [horaChegada, setHoraChegada] = useState();
+  const [numAcompanhantes, setNumAcompanhantes] = useState(0);
+  const [traraPresente, setTraraPresente] = useState(false);
+  const [sequencialPresente, setSequencialPresente] = useState(1);
+  const [presentesEscolhidos, setPresentesEscolhidos] = useState([]);
 
-  function submitHandler(evento){
+  function submitHandler(evento) {
     evento.preventDefault();
 
-    if(!validacaoNomeUsuarioHandler() && !validacaoIdadeHandler()) {
-      popUpHandler('Preencha todos os campos');
+    if (!validacaoNomeUsuarioHandler() && !validacaoIdadeHandler()) {
+      popUpHandler("Preencha todos os campos");
       return;
     }
-    if(!validacaoNomeUsuarioHandler()){
-      popUpHandler('Nome de Usuário inválido');
+    if (!validacaoNomeUsuarioHandler()) {
+      popUpHandler("Nome de Usuário inválido");
       return;
     }
-    if(!validacaoIdadeHandler()){
-      popUpHandler('A idade precisa estar preenchida e ser maior que 0.');
+    if (!validacaoIdadeHandler()) {
+      popUpHandler("A idade precisa estar preenchida e ser maior que 0.");
       return;
     }
-    addUsuario({inputNomeUsuario, inputIdade});
+    addUsuario({ inputNomeUsuario, inputIdade, confirmado, horaChegada, numAcompanhantes, traraPresente, ListaPresentesAdicionados });
     limpaDados();
-    popUpHandler('Usuário cadastrado com sucesso!');
+    popUpHandler("Usuário cadastrado com sucesso!");
   }
 
-  function validacaoNomeUsuarioHandler(){
+  function validacaoNomeUsuarioHandler() {
     if (!inputNomeUsuario.trim() || inputNomeUsuario.trim().length === 0) {
       setNomeUsuarioValido(false);
       return false;
     }
     return true;
   }
-  
+
   function validacaoIdadeHandler() {
-    if(!inputIdade.trim() || inputIdade.trim().length === 0 || inputIdade <= 0){
+    if (
+      !inputIdade.trim() ||
+      inputIdade.trim().length === 0 ||
+      inputIdade <= 0
+    ) {
       setIdadeValida(false);
       return false;
     }
     return true;
   }
 
-  function onChangeNomeUsuarioHandler(evento){
-    setInputNomeUsuario(()=>evento.target.value.trim());
-  }
-
-  function onChangeIdadeHandler(evento){
-    setInputIdade(evento.target.value.trim());
-  }
-
   function limpaDados() {
     setInputNomeUsuario(" ");
     setInputIdade(" ");
   }
-  
-  function popUpHandler(texto){
+
+  function popUpHandler(texto) {
     setTextoPopUp(texto);
     setPopUpAberto(!popUpAberto);
   }
 
-  useEffect(() => {
-    console.log("InputNomeUsuario: ", inputNomeUsuario);
-  }, [inputNomeUsuario]);
+  function addPresenteHandler(idPresente, nomePresente, quantidadePresente) {
+    setPresentesEscolhidos(prevState => [...prevState, {id: idPresente, nome: nomePresente, quantidade: quantidadePresente}]);
+  }
 
-  useEffect(() => {
-    console.log("InputIdade: ", inputIdade);
-  }, [inputIdade]);
+  useEffect(()=>{
+    // console.log("Presente adicionado!");
+    // console.log("Presentes Escolhidos: ", presentesEscolhidos);
+  },[presentesEscolhidos])
 
   return (
     <form onSubmit={submitHandler}>
       <GroupInput>
-        <LabelInput>Nome de Usuário</LabelInput>
+        <LabelInput>Nome Completo do Convidado</LabelInput>
         <Input
-          onChange={onChangeNomeUsuarioHandler}
+          onChange={(evento) =>
+            setInputNomeUsuario(() => evento.target.value.trim())
+          }
           type="text"
           value={inputNomeUsuario}
-          style={{ borderColor: !nomeUsuarioValido ? "red" : Input.borderColor }}
+          style={{
+            borderColor: !nomeUsuarioValido ? "red" : Input.borderColor,
+          }}
         />
       </GroupInput>
 
       <GroupInput>
         <LabelInput>Idade (em anos)</LabelInput>
         <Input
-          onChange={onChangeIdadeHandler}
+          onChange={(evento) => setInputIdade(evento.target.value.trim())}
           type="number"
           value={inputIdade}
           min="0"
@@ -95,10 +104,48 @@ export default function FormAddUsuario({addUsuario}) {
         />
       </GroupInput>
 
-      <BotaoSubmit type="submit" value="Adicionar Usuário"/>
+      <LabelInput> Confirmado? </LabelInput>
+      <br />
+      <Input
+        type="checkbox"
+        value={confirmado}
+        onChange={() => setConfirmado(!confirmado)}
+      />
+      <br />
 
-      {popUpAberto === true && <PopUp popUpHandler={popUpHandler} texto={textoPopUp} />}
+      <GroupInput>
+        <LabelInput> Horário Estimado de Chegada </LabelInput>
+        <Input type="datetime-local" value={horaChegada} onChange={(evento)=>setHoraChegada(()=>evento.target.value)}/>
+      </GroupInput>
+      <br />
 
+      <GroupInput>
+        <LabelInput> Número de Acompanhantes </LabelInput>
+        <Input
+          type="number"
+          min="0"
+          step="1"
+          value={numAcompanhantes}
+          onChange={(evento) => setNumAcompanhantes(() => evento.target.value)}
+        />
+      </GroupInput>
+      <br />
+
+      <FormPresente
+        listaOpcoesPresentes={listaOpcoesPresentes}
+        traraPresente={traraPresente}
+        setTraraPresente={setTraraPresente}
+        sequencialPresente={sequencialPresente}
+        addPresente={addPresenteHandler}
+        presentesEscolhidos={presentesEscolhidos}
+      />
+      <br />
+
+      <BotaoSubmit type="submit" value="Adicionar Usuário" />
+
+      {popUpAberto === true && (
+        <PopUp popUpHandler={popUpHandler} texto={textoPopUp} />
+      )}
     </form>
   );
 }

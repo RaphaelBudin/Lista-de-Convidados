@@ -20,12 +20,18 @@ O sistema terá:
     - ID Presente (campo relacional)
     - Quantidade presenteada
 
-**Propriedades dos presentes**:
+**Propriedades dos presentes (lista de presentes)**:
 - ID (autogerado)
 - Nome Presente
 - Convidados (campo relacional)
 - Quantidade estimada
 - Quantidade obtida
+
+**Propriedades dos presentes (dado pelo convidado)**:
+- ID (autogerado)
+- Nome Presentes
+- Convidados (campo relacional)
+- Quantidade dada
 
 **Requisitos funcionais**:
 - Filtrar convidados por:
@@ -42,6 +48,7 @@ O sistema terá:
     - Meta de quantidade alcancada
     
 - Após anfritrião define um horário inicial, permite identificar quem vai chegar atrasado (+1 hora do início)
+- Convidados podem trazer 0-n presentes
 
 # Habilidades abordadas neste projeto #
 - Roteamento

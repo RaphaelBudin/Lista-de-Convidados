@@ -46,7 +46,7 @@ export default function ListaUsuarios({usuarios,excluirUsuario}){
 
   return(
         <div>
-          <LabelInput>Usuários Cadastrados</LabelInput>
+          <LabelInput>Convidados Cadastrados</LabelInput>
           {usuarios.length > 0 && <div style={{marginTop:25, marginBottom:10, textAlign:'center',}}>
               <BotaoOrdernar onClick={ordernarNome}>Ordenar (Nome) </BotaoOrdernar>
               <BotaoOrdernar onClick={ordernarIdade}>Ordenar (Idade) </BotaoOrdernar>
