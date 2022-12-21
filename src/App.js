@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CardBranco, Container } from "./Components";
-import FormAddUsuario from "./components/forms/FormAddUsuario";
-import ListaUsuarios from "./components/lists/ListaUsuarios";
+import FormAddConvidado from "./components/forms/FormAddConvidado";
+import ListaConvidados from "./components/lists/ListaConvidados";
 
 const listaOpcoesPresentes = [
   {id: 1, nome: "Batedeira", quantidade: 1, convidado: "Raphael"},
@@ -20,13 +20,13 @@ const listaOpcoesPresentes = [
 
 function App() {
   const [contador, setContador] = useState(0);
-  const [usuarios, setUsuarios] = useState([]);
+  const [convidados, setConvidados] = useState([]);
 
   function addUsuario(usuarioObject) {
     console.log("Dentro do componente AddUsuario - APP.js");
     console.log(usuarioObject);
 
-    setUsuarios((prevState) => {
+    setConvidados((prevState) => {
       return [
         ...prevState,
         { id: contador, nome: usuarioObject.inputNomeUsuario, idade: usuarioObject.inputIdade, presentesEscolhidos: [usuarioObject.presentesEscolhidos] },
@@ -35,25 +35,24 @@ function App() {
     setContador(contador + 1);
   }
 
-  function excluirUsuario(idExcluir) {
-    setUsuarios(() =>
-      usuarios.filter((usuario) => usuario.id != idExcluir.target.value)
+  function excluirConvidado(idExcluir) {
+    setConvidados(() =>
+      convidados.filter((usuario) => usuario.id != idExcluir.target.value)
     );
   }
 
   return (
     <Container>
       <CardBranco>
-        <FormAddUsuario
+        <FormAddConvidado
           addUsuario={addUsuario}
-          excluirUsuario={excluirUsuario}
+          excluirConvidado={excluirConvidado}
           listaOpcoesPresentes={listaOpcoesPresentes}
         />
       </CardBranco>
       <CardBranco>
-        <ListaUsuarios usuarios={usuarios} excluirUsuario={excluirUsuario} />
+        <ListaConvidados convidados={convidados} excluirConvidado={excluirConvidado} />
       </CardBranco>
-
     </Container>
   );
 }

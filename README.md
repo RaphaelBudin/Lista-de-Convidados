@@ -56,3 +56,10 @@ O sistema terá:
 - Pesquisa de informações
 - Filtro de informações
 - Ordenação de informações
+
+### Precisa fazer ###
+-> Array de Presentes Escolhidos na variavel 'usuarios' estão errados
+-> Fazer cadastro do Convidado em várias telas
+    1: Nome, Idade, Confirmado, Horário Chegada, Acompanhantes
+    2: Cadastro dos Presentes
+-> Vincular o presente ao convidado-raiz

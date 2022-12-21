@@ -9,6 +9,7 @@ export default function FormPresente({
   setTraraPresente,
   sequencialPresente,
   addPresente,
+  removePresenteHandler
 }) {
   const [localSequencialPresente, setLocalSequencialPresente] = useState();
   const [localPresenteID, setLocalPresenteID] = useState();
@@ -81,7 +82,7 @@ export default function FormPresente({
         <button value="Salvar Presente" onClick={localAddPresente}>
           Salvar Presente
         </button>
-        <ListaPresentesAdicionados presentesEscolhidos={presentesEscolhidos} />
+        <ListaPresentesAdicionados presentesEscolhidos={presentesEscolhidos} removePresenteHandler={removePresenteHandler}/>
       </GroupInput>
     </GroupInput>
   );

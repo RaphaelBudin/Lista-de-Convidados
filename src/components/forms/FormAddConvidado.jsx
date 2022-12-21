@@ -4,7 +4,7 @@ import FormPresente from "./FormPresente";
 import ListaPresentesAdicionados from "./ListaPresentesAdicionados";
 import PopUp from "./PopUp";
 
-export default function FormAddUsuario({ addUsuario, listaOpcoesPresentes }) {
+export default function FormAddConvidado({ addUsuario, listaOpcoesPresentes }) {
   const [inputNomeUsuario, setInputNomeUsuario] = useState("");
   const [inputIdade, setInputIdade] = useState("");
   const [popUpAberto, setPopUpAberto] = useState(false);
@@ -21,11 +21,11 @@ export default function FormAddUsuario({ addUsuario, listaOpcoesPresentes }) {
   function submitHandler(evento) {
     evento.preventDefault();
 
-    if (!validacaoNomeUsuarioHandler() && !validacaoIdadeHandler()) {
+    if (!validacaoNomeConvidadoHandler() && !validacaoIdadeHandler()) {
       popUpHandler("Preencha todos os campos");
       return;
     }
-    if (!validacaoNomeUsuarioHandler()) {
+    if (!validacaoNomeConvidadoHandler()) {
       popUpHandler("Nome de Usuário inválido");
       return;
     }
@@ -38,8 +38,8 @@ export default function FormAddUsuario({ addUsuario, listaOpcoesPresentes }) {
     popUpHandler("Usuário cadastrado com sucesso!");
   }
 
-  function validacaoNomeUsuarioHandler() {
-    if (!inputNomeUsuario.trim() || inputNomeUsuario.trim().length === 0) {
+  function validacaoNomeConvidadoHandler() {
+    if (!inputNomeUsuario || inputNomeUsuario.length === 0) {
       setNomeUsuarioValido(false);
       return false;
     }
@@ -48,8 +48,8 @@ export default function FormAddUsuario({ addUsuario, listaOpcoesPresentes }) {
 
   function validacaoIdadeHandler() {
     if (
-      !inputIdade.trim() ||
-      inputIdade.trim().length === 0 ||
+      !inputIdade ||
+      inputIdade.length === 0 ||
       inputIdade <= 0
     ) {
       setIdadeValida(false);
@@ -72,6 +72,10 @@ export default function FormAddUsuario({ addUsuario, listaOpcoesPresentes }) {
     setPresentesEscolhidos(prevState => [...prevState, {id: idPresente, nome: nomePresente, quantidade: quantidadePresente}]);
   }
 
+  function removePresenteHandler(idPresenteDeletar){
+    presentesEscolhidos.filter(presente => presente.id != idPresenteDeletar).map(presente => presente);
+  }
+
   useEffect(()=>{
     // console.log("Presente adicionado!");
     // console.log("Presentes Escolhidos: ", presentesEscolhidos);
@@ -83,7 +87,7 @@ export default function FormAddUsuario({ addUsuario, listaOpcoesPresentes }) {
         <LabelInput>Nome Completo do Convidado</LabelInput>
         <Input
           onChange={(evento) =>
-            setInputNomeUsuario(() => evento.target.value.trim())
+            setInputNomeUsuario(() => evento.target.value)
           }
           type="text"
           value={inputNomeUsuario}
@@ -96,7 +100,7 @@ export default function FormAddUsuario({ addUsuario, listaOpcoesPresentes }) {
       <GroupInput>
         <LabelInput>Idade (em anos)</LabelInput>
         <Input
-          onChange={(evento) => setInputIdade(evento.target.value.trim())}
+          onChange={(evento) => setInputIdade(evento.target.value)}
           type="number"
           value={inputIdade}
           min="0"
@@ -138,6 +142,7 @@ export default function FormAddUsuario({ addUsuario, listaOpcoesPresentes }) {
         sequencialPresente={sequencialPresente}
         addPresente={addPresenteHandler}
         presentesEscolhidos={presentesEscolhidos}
+        removePresenteHandler={removePresenteHandler}
       />
       <br />
 

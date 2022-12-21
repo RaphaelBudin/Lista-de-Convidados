@@ -44,7 +44,7 @@ export const BotaoSubmit = styled.input`
     /* margin:24px 0px; */
 `;
 
-export const DisplayUsuarioComponent = styled.div`
+export const DisplayConvidadoComponent = styled.div`
     min-height: 36px;
     height: fit-content;
     width: 100%;
